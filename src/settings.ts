@@ -2,9 +2,9 @@ import type { Strength } from "./bold.ts";
 
 /** Synced settings (chrome.storage.sync). No secrets here. */
 export type Settings = {
-  sites: Record<string, boolean>; // key: location.hostname
+  sites: Record<string, boolean>; // bold word starts, per site. key: location.hostname
+  focusSites: Record<string, boolean>; // focus reader (paragraph spotlight), per site, separate from bolding
   strength: Strength;
-  spotlight: boolean;
   skim: boolean; // highlight key paragraphs after an AI pass, dim the rest
   aiEnabled: boolean; // AI is opt-in and off by default
 };
@@ -14,8 +14,8 @@ export type Keys = { jevKey: string; anthropicKey: string };
 
 export const DEFAULT_SETTINGS: Settings = {
   sites: {},
+  focusSites: {},
   strength: "medium",
-  spotlight: false,
   skim: false,
   aiEnabled: false,
 };
@@ -25,19 +25,23 @@ const STRENGTH_VALUES: readonly Strength[] = ["light", "medium", "strong"];
 /** Fill in defaults and drop bad values from whatever storage returned. */
 export function normalizeSettings(raw: Partial<Record<keyof Settings, unknown>> | undefined): Settings {
   const r = raw ?? {};
-  const sites: Record<string, boolean> = {};
-  if (r.sites && typeof r.sites === "object") {
-    for (const [host, on] of Object.entries(r.sites as Record<string, unknown>)) {
-      if (typeof on === "boolean") sites[host] = on;
-    }
-  }
   return {
-    sites,
+    sites: boolMap(r.sites),
+    focusSites: boolMap(r.focusSites),
     strength: STRENGTH_VALUES.includes(r.strength as Strength) ? (r.strength as Strength) : DEFAULT_SETTINGS.strength,
-    spotlight: typeof r.spotlight === "boolean" ? r.spotlight : DEFAULT_SETTINGS.spotlight,
     skim: typeof r.skim === "boolean" ? r.skim : DEFAULT_SETTINGS.skim,
     aiEnabled: typeof r.aiEnabled === "boolean" ? r.aiEnabled : DEFAULT_SETTINGS.aiEnabled,
   };
+}
+
+function boolMap(v: unknown): Record<string, boolean> {
+  const out: Record<string, boolean> = {};
+  if (v && typeof v === "object") {
+    for (const [host, on] of Object.entries(v as Record<string, unknown>)) {
+      if (typeof on === "boolean") out[host] = on;
+    }
+  }
+  return out;
 }
 
 /** Return a new sites map with `host` flipped. */

@@ -3,8 +3,8 @@
 A Chrome extension that makes long web pages easier to read, built with ADHD readers in mind.
 
 - **Bold word starts.** The first part of each word is bolded so your eyes have anchors. Three strengths: light, medium, strong.
-- **Per-site, remembered.** Turn it on only where you read. Press <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> on a Mac (<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> on Windows and Linux) to toggle the current site. Every site starts off.
-- **Paragraph spotlight.** Dims everything except the paragraph under your cursor.
+- **Per-site, remembered.** Turn it on only where you read. Bolding and the focus reader are separate switches, and every site starts with both off. On a Mac, <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> toggles bolding and <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> toggles the focus reader (use <kbd>Alt</kbd> instead of <kbd>Control</kbd> on Windows and Linux).
+- **Focus reader.** Enlarges the paragraph under your cursor and dims the rest. Click outside the text to see the whole page again. It has its own switch, so you can use bolding without it.
 - **AI summaries (optional, your own keys).** Finds the dense paragraphs and turns them into short bullets, adds a TL;DR at the top, and a skim mode that highlights the paragraphs that carry the argument.
 
 It leaves code blocks, form fields and editable areas alone, so Gmail drafts, Google Docs and code editors keep working. Turning it off restores the page exactly.

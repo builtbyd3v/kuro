@@ -17,11 +17,11 @@ function hostOf(url: string | undefined): string | null {
 }
 
 chrome.commands.onCommand.addListener(async (command, tab) => {
-  if (command !== "toggle-site") return;
   const host = hostOf(tab?.url);
   if (!host) return;
-  const { sites } = await loadSettings();
-  await chrome.storage.sync.set({ sites: toggleSite(sites, host) });
+  const { sites, focusSites } = await loadSettings();
+  if (command === "toggle-site") await chrome.storage.sync.set({ sites: toggleSite(sites, host) });
+  if (command === "toggle-focus") await chrome.storage.sync.set({ focusSites: toggleSite(focusSites, host) });
 });
 
 async function handleAnalyze(req: AnalyzeRequest): Promise<AnalyzeResponse> {

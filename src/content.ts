@@ -1,6 +1,6 @@
 // Content script: bolds word starts, runs the paragraph spotlight, and shows AI results.
 
-import { splitText, splitWord, type Strength } from "./bold.ts";
+import { lighter, SMALL_TEXT_PX, splitText, splitWord, type Strength } from "./bold.ts";
 import { loadSettings, normalizeSettings, type Settings } from "./settings.ts";
 import { wordCount } from "./ai/analyze.ts";
 import type { Analysis, AnalyzeRequest, AnalyzeResponse, Paragraph } from "./ai/types.ts";
@@ -21,12 +21,26 @@ function shouldSkip(parent: Element | null): boolean {
   return (parent as HTMLElement).isContentEditable === true;
 }
 
-function boldTextNode(node: Text, strength: Strength): void {
+const sizeCache = new WeakMap<Element, boolean>();
+
+/** Small text gets crowded with full bolding, so it gets a lighter weight and one step less. */
+function isSmallText(el: Element): boolean {
+  let small = sizeCache.get(el);
+  if (small === undefined) {
+    small = parseFloat(getComputedStyle(el).fontSize) < SMALL_TEXT_PX;
+    sizeCache.set(el, small);
+  }
+  return small;
+}
+
+function boldTextNode(node: Text, base: Strength): void {
   const text = node.nodeValue ?? "";
   const parts = splitText(text);
   if (!parts.some((p) => p.word)) return;
+  const small = node.parentElement ? isSmallText(node.parentElement) : false;
+  const strength = small ? lighter(base) : base;
   const wrap = document.createElement("span");
-  wrap.className = "br-w";
+  wrap.className = small ? "br-w br-sm" : "br-w";
   for (const part of parts) {
     if (!part.word) {
       wrap.append(part.text);
@@ -145,16 +159,42 @@ function clearSpot(): void {
   spotActive = null;
 }
 
+/**
+ * The focused block is zoomed, which reflows the page. Keep `anchor` at the same spot on screen
+ * so the paragraph you are reading does not jump away from the cursor.
+ */
+function keepInPlace(anchor: Element | null, change: () => void): void {
+  const before = anchor?.getBoundingClientRect().top;
+  change();
+  if (anchor && before !== undefined && anchor.isConnected) {
+    const delta = anchor.getBoundingClientRect().top - before;
+    if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+  }
+}
+
 function updateSpot(): void {
   rafPending = false;
   const target = lastTarget instanceof Element ? lastTarget : null;
   const block = target?.closest(BLOCK);
   if (!block || block === spotActive) return;
-  clearSpot();
-  spotActive = block;
-  block.classList.add("br-spot-active");
-  for (let a = block.parentElement?.closest(BLOCK); a; a = a.parentElement?.closest(BLOCK)) a.classList.add("br-spot-anc");
-  document.documentElement.classList.add("br-spot-on");
+  keepInPlace(block, () => {
+    clearSpot();
+    spotActive = block;
+    block.classList.add("br-spot-active");
+    for (let a = block.parentElement?.closest(BLOCK); a; a = a.parentElement?.closest(BLOCK)) a.classList.add("br-spot-anc");
+    document.documentElement.classList.add("br-spot-on");
+  });
+}
+
+/** Clicking anywhere that isn't text shows the whole page again, until you hover a paragraph. */
+function onClick(e: MouseEvent): void {
+  if (!spotActive) return;
+  const target = e.target instanceof Element ? e.target : null;
+  if (target?.closest(BLOCK)) return;
+  keepInPlace(spotActive, () => {
+    clearSpot();
+    document.documentElement.classList.remove("br-spot-on");
+  });
 }
 
 function onMove(e: MouseEvent): void {
@@ -167,10 +207,12 @@ function onMove(e: MouseEvent): void {
 
 function setSpotlight(on: boolean): void {
   document.removeEventListener("mousemove", onMove, { capture: true });
+  document.removeEventListener("click", onClick, { capture: true });
   if (on) {
     document.addEventListener("mousemove", onMove, { capture: true, passive: true });
+    document.addEventListener("click", onClick, { capture: true, passive: true });
   } else {
-    clearSpot();
+    keepInPlace(spotActive, clearSpot);
     document.documentElement.classList.remove("br-spot-on");
   }
 }
@@ -298,11 +340,11 @@ async function runAnalysis(): Promise<AnalyzeResponse & { counts?: { paragraphs:
 
 function apply(s: Settings): void {
   settings = s;
-  // One switch per site, off until the user turns it on. Nothing visual runs on a site that is off.
-  const on = s.sites[host] === true;
-  setBolded(on, s.strength);
-  setSpotlight(on && s.spotlight);
-  document.documentElement.classList.toggle("br-skim-on", on && s.skim);
+  // Two separate switches per site, both off until the user turns them on.
+  setBolded(s.sites[host] === true, s.strength);
+  setSpotlight(s.focusSites[host] === true);
+  // Skim only shows after the user runs Summarize on this page.
+  document.documentElement.classList.toggle("br-skim-on", s.skim);
 }
 
 chrome.storage.onChanged.addListener((_changes, area) => {

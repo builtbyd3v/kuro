@@ -19,6 +19,10 @@
     "toggle-site": {
       "suggested_key": { "default": "Alt+Shift+B", "mac": "MacCtrl+Shift+B" },
       "description": "Turn bold word starts on or off for this site"
+    },
+    "toggle-focus": {
+      "suggested_key": { "default": "Alt+Shift+F", "mac": "MacCtrl+Shift+F" },
+      "description": "Turn the focus reader on or off for this site"
     }
   }
 }

@@ -2,6 +2,14 @@
 
 export type Strength = "light" | "medium" | "strong";
 
+/** One step lighter, used for small text where heavy bolding gets crowded. */
+export function lighter(s: Strength): Strength {
+  return s === "strong" ? "medium" : "light";
+}
+
+/** Text smaller than this (CSS px) gets a lighter weight and one step less bolding. */
+export const SMALL_TEXT_PX = 16;
+
 /** Fraction of each word's letters that get bolded. */
 export const STRENGTHS: Record<Strength, number> = {
   light: 0.3,

@@ -12,10 +12,16 @@ test("AI is off by default", () => {
 });
 
 test("normalizeSettings drops bad values", () => {
-  const s = normalizeSettings({ strength: "huge", spotlight: "yes", sites: { "a.com": true, "b.com": "on" } });
+  const s = normalizeSettings({ strength: "huge", focusSites: { "a.com": "yes", "c.com": true }, sites: { "a.com": true, "b.com": "on" } });
   assert.equal(s.strength, "medium");
-  assert.equal(s.spotlight, false);
+  assert.deepEqual(s.focusSites, { "c.com": true });
   assert.deepEqual(s.sites, { "a.com": true });
+});
+
+test("every site starts with bolding and focus reader off", () => {
+  const s = normalizeSettings({});
+  assert.deepEqual(s.sites, {});
+  assert.deepEqual(s.focusSites, {});
 });
 
 test("toggleSite flips one host and leaves the input alone", () => {

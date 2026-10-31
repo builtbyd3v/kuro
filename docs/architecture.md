@@ -14,9 +14,9 @@ flowchart LR
   K(["Ctrl+Shift+B (Mac) / Alt+Shift+B<br/>commands API"])
   D["Web page DOM"]
 
-  P -- "write sites / strength / spotlight" --> S
+  P -- "write sites / focusSites / strength" --> S
   K --> B
-  B -- "flip sites[hostname]" --> S
+  B -- "flip sites or focusSites[hostname]" --> S
   S -- "read on load + storage.onChanged" --> C
   C -- "splitText, boldLength" --> L
   C -- "wrap words in span.br-w,<br/>spotlight class on hovered block" --> D
@@ -27,7 +27,7 @@ flowchart LR
 
 | Part | File | Job |
 |---|---|---|
-| Popup | `popup.html`, `src/popup.ts`, `popup.css` | Site on/off, strength, spotlight. Writes settings only. |
+| Popup | `popup.html`, `src/popup.ts`, `popup.css` | Bolding and focus reader per site, strength. Writes settings only. |
 | Service worker | `src/background.ts` | Handles the toggle shortcut (Control+Shift+B on Mac, Alt+Shift+B elsewhere) and flips the current site. |
 | Content script | `src/content.ts`, `content.css` | Reads settings, bolds text nodes, runs the spotlight, reverts cleanly. |
 | Pure logic | `src/bold.ts` | `boldLength(word, strength)` and `splitText(text)`. No DOM, unit tested with `node --test`. |
@@ -67,9 +67,9 @@ sequenceDiagram
 
 ```ts
 type Settings = {
-  sites: Record<string, boolean>; // key: location.hostname
-  strength: "light" | "medium" | "strong"; // 0.3, 0.45, 0.6 of each word, round up, min 1 letter
-  spotlight: boolean;
+  sites: Record<string, boolean>;      // bold word starts, key: location.hostname, off unless true
+  focusSites: Record<string, boolean>; // focus reader, same keys, separate switch
+  strength: "light" | "medium" | "strong"; // 0.3, 0.45, 0.6 of each word, round up, min 1 letter; text under 16px gets one step less and semibold
   skim: boolean;     // fade non-key paragraphs after an AI pass
   aiEnabled: boolean; // off by default
 };

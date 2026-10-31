@@ -45,11 +45,24 @@ async function init(): Promise<void> {
     $("site-note").hidden = false;
   }
 
-  // Show the shortcut Chrome actually assigned (Control+Shift+B on a Mac, Alt+Shift+B elsewhere).
+  // Focus reader toggle, separate from bolding
+  const focus = $<HTMLInputElement>("focus");
+  if (host) {
+    focus.checked = current.focusSites[host] === true;
+    focus.addEventListener("change", () => save({ focusSites: toggleSite(current.focusSites, host) }));
+  } else {
+    focus.disabled = true;
+  }
+
+  // Show the shortcuts Chrome actually assigned (Control+Shift+B/F on a Mac, Alt+Shift+B/F elsewhere).
   chrome.commands.getAll((cmds) => {
-    const key = cmds.find((c) => c.name === "toggle-site")?.shortcut ?? "";
-    $("shortcut").textContent = key || "none";
-    $("shortcut-note").hidden = Boolean(key);
+    let missing = false;
+    for (const [name, id] of [["toggle-site", "shortcut-site"], ["toggle-focus", "shortcut-focus"]]) {
+      const key = cmds.find((c) => c.name === name)?.shortcut ?? "";
+      $(id).textContent = key || "none";
+      missing ||= !key;
+    }
+    $("shortcut-note").hidden = !missing;
   });
 
   // Strength
@@ -58,10 +71,7 @@ async function init(): Promise<void> {
     radio.addEventListener("change", () => radio.checked && save({ strength: radio.value as Strength }));
   }
 
-  // Spotlight and skim
-  const spotlight = $<HTMLInputElement>("spotlight");
-  spotlight.checked = current.spotlight;
-  spotlight.addEventListener("change", () => save({ spotlight: spotlight.checked }));
+  // Skim
   const skim = $<HTMLInputElement>("skim");
   skim.checked = current.skim;
   skim.addEventListener("change", () => save({ skim: skim.checked }));
