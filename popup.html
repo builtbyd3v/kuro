@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BoldRead</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>BoldRead</h1>
+    <span id="host" class="muted"></span>
+  </header>
+
+  <section>
+    <label class="row switch">
+      <span>Bold word starts on this site</span>
+      <input type="checkbox" id="site">
+    </label>
+    <p id="site-note" class="muted small" hidden>BoldRead can't run on this page.</p>
+
+    <fieldset>
+      <legend>Strength</legend>
+      <div class="seg">
+        <label><input type="radio" name="strength" value="light"><span>Light</span></label>
+        <label><input type="radio" name="strength" value="medium"><span>Medium</span></label>
+        <label><input type="radio" name="strength" value="strong"><span>Strong</span></label>
+      </div>
+    </fieldset>
+
+    <label class="row switch">
+      <span>Paragraph spotlight<br><span class="muted small">Dims everything but the paragraph under your cursor</span></span>
+      <input type="checkbox" id="spotlight">
+    </label>
+
+    <p class="muted small">Shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> turns this site on or off.</p>
+  </section>
+
+  <section>
+    <label class="row switch">
+      <span>AI summaries<br><span class="muted small">Off by default. Uses your own keys.</span></span>
+      <input type="checkbox" id="ai">
+    </label>
+
+    <div id="ai-panel" hidden>
+      <p class="muted small">When you click Summarize, this page's paragraphs go to TypeSafe (Jev) to find dense and key paragraphs, then to Anthropic (Claude Haiku) to write bullets and a TL;DR. Keys stay on this device.</p>
+      <label class="field">Jev (TypeSafe) API key
+        <input type="password" id="jev-key" autocomplete="off" spellcheck="false" placeholder="Paste key">
+      </label>
+      <label class="field">Anthropic API key
+        <input type="password" id="anthropic-key" autocomplete="off" spellcheck="false" placeholder="sk-ant-...">
+      </label>
+      <button type="button" id="save-keys" class="secondary">Save keys</button>
+
+      <button type="button" id="analyze" class="primary">Summarize this page</button>
+      <label class="row switch">
+        <span>Skim mode<br><span class="muted small">Highlights key paragraphs, fades the rest</span></span>
+        <input type="checkbox" id="skim">
+      </label>
+      <p id="status" class="small" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

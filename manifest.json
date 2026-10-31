@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "BoldRead",
+  "version": "0.1.0",
+  "description": "Bold word starts, a paragraph spotlight, and optional AI bullets to make long web text easier to read.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://api.typesafe.ai/*", "https://api.anthropic.com/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": { "default_popup": "popup.html", "default_title": "BoldRead" },
+  "commands": {
+    "toggle-site": {
+      "suggested_key": { "default": "Alt+Shift+B" },
+      "description": "Turn bold word starts on or off for this site"
+    }
+  }
+}

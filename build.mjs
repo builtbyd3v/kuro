@@ -21,6 +21,9 @@ const ctx = await esbuild.context({
   bundle: true,
   format: "iife",
   target: "chrome120",
+  platform: "browser",
+  minify: !watch,
+  sourcemap: watch ? "inline" : false,
   logLevel: "info",
   plugins: [{ name: "static", setup: (b) => b.onEnd(copyStatic) }],
 });

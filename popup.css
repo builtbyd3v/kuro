@@ -1,0 +1,57 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1f1f1f;
+  --muted: #666;
+  --line: #e4e4e4;
+  --accent: #f2b705;
+  --accent-fg: #1f1f1f;
+  --field: #f6f6f6;
+  --err: #b3261e;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1d1d1f;
+    --fg: #f2f2f2;
+    --muted: #a0a0a0;
+    --line: #333;
+    --field: #2a2a2c;
+    --err: #ff8a80;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  width: 320px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+h1 { margin: 0 0 8px; font-size: 16px; }
+section { padding: 10px 0; border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; padding-top: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0; }
+.switch input { width: 34px; height: 18px; accent-color: var(--accent); flex: none; }
+fieldset { border: 0; padding: 0; margin: 10px 0; }
+legend { padding: 0; margin-bottom: 6px; font-weight: 600; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: block; padding: 6px 0; text-align: center; cursor: pointer; }
+.seg input:checked + span { background: var(--accent); color: var(--accent-fg); font-weight: 600; }
+.seg input:focus-visible + span { outline: 2px solid var(--fg); outline-offset: -2px; }
+.field { display: block; margin: 8px 0; font-weight: 600; font-size: 12px; }
+.field input {
+  display: block; width: 100%; margin-top: 4px; padding: 7px 8px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--field); color: var(--fg); font: inherit; font-weight: 400;
+}
+button { font: inherit; border-radius: 8px; padding: 7px 12px; cursor: pointer; border: 1px solid var(--line); }
+.secondary { background: transparent; color: var(--fg); }
+.primary { display: block; width: 100%; margin-top: 12px; background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
+button:disabled { opacity: 0.6; cursor: default; }
+kbd { font: 11px ui-monospace, monospace; padding: 1px 4px; border: 1px solid var(--line); border-radius: 4px; }
+.error { color: var(--err); }

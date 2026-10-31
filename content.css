@@ -1,0 +1,80 @@
+/* BoldRead content styles. Every rule is scoped to br- classes so nothing leaks into the page. */
+
+b.br-b {
+  font-weight: bolder;
+  font-style: inherit;
+  color: inherit;
+}
+
+/* Paragraph spotlight: dim blocks except the one under the cursor (and its containers). */
+html.br-spot-on :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, dd, dt, figcaption, td, th, pre, .br-tldr, .br-chunk) {
+  opacity: 0.3;
+  transition: opacity 0.15s ease;
+}
+html.br-spot-on :is(.br-spot-active, .br-spot-anc),
+html.br-spot-on .br-spot-active :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, dd, dt, figcaption, td, th, pre) {
+  opacity: 1 !important; /* wins over skim-mode fading too */
+}
+
+/* Skim mode: after an AI pass, highlight key paragraphs and fade the rest. */
+html.br-skim-on.br-has-analysis .br-analyzed:not(.br-key) {
+  opacity: 0.45;
+}
+html.br-has-analysis .br-key {
+  box-shadow: -4px 0 0 0 #f2b705;
+}
+html.br-skim-on.br-has-analysis .br-key {
+  background: rgba(242, 183, 5, 0.12);
+}
+
+/* Dense paragraph replaced by bullets until "Show original". */
+.br-orig-hidden {
+  display: none !important;
+}
+
+/* Boxes BoldRead inserts. */
+.br-ui {
+  box-sizing: border-box;
+  margin: 1em 0;
+  padding: 0.75em 1em;
+  border-left: 4px solid #f2b705;
+  border-radius: 6px;
+  background: #fff8e1;
+  color: #1f1f1f;
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  text-align: left;
+}
+.br-ui ul {
+  margin: 0.25em 0 0.5em;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+.br-ui li {
+  margin: 0.2em 0;
+}
+.br-ui-title {
+  display: block;
+  font-size: 0.8em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.br-ctl {
+  all: unset;
+  cursor: pointer;
+  font: 600 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #7a5b00;
+  text-decoration: underline;
+}
+.br-ctl:focus-visible {
+  outline: 2px solid #7a5b00;
+  outline-offset: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  .br-ui {
+    background: #2b2614;
+    color: #f3ecd6;
+  }
+  .br-ctl {
+    color: #f2c94c;
+  }
+}
