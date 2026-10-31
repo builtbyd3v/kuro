@@ -298,9 +298,11 @@ async function runAnalysis(): Promise<AnalyzeResponse & { counts?: { paragraphs:
 
 function apply(s: Settings): void {
   settings = s;
-  setBolded(s.sites[host] === true, s.strength);
-  setSpotlight(s.spotlight);
-  document.documentElement.classList.toggle("br-skim-on", s.skim);
+  // One switch per site, off until the user turns it on. Nothing visual runs on a site that is off.
+  const on = s.sites[host] === true;
+  setBolded(on, s.strength);
+  setSpotlight(on && s.spotlight);
+  document.documentElement.classList.toggle("br-skim-on", on && s.skim);
 }
 
 chrome.storage.onChanged.addListener((_changes, area) => {

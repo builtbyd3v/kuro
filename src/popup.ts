@@ -45,6 +45,13 @@ async function init(): Promise<void> {
     $("site-note").hidden = false;
   }
 
+  // Show the shortcut Chrome actually assigned (Control+Shift+B on a Mac, Alt+Shift+B elsewhere).
+  chrome.commands.getAll((cmds) => {
+    const key = cmds.find((c) => c.name === "toggle-site")?.shortcut ?? "";
+    $("shortcut").textContent = key || "none";
+    $("shortcut-note").hidden = Boolean(key);
+  });
+
   // Strength
   for (const radio of document.querySelectorAll<HTMLInputElement>('input[name="strength"]')) {
     radio.checked = radio.value === current.strength;

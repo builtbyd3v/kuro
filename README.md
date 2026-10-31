@@ -3,7 +3,7 @@
 A Chrome extension that makes long web pages easier to read, built with ADHD readers in mind.
 
 - **Bold word starts.** The first part of each word is bolded so your eyes have anchors. Three strengths: light, medium, strong.
-- **Per-site, remembered.** Turn it on only where you read. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> to toggle the current site.
+- **Per-site, remembered.** Turn it on only where you read. Press <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> on a Mac (<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> on Windows and Linux) to toggle the current site. Every site starts off.
 - **Paragraph spotlight.** Dims everything except the paragraph under your cursor.
 - **AI summaries (optional, your own keys).** Finds the dense paragraphs and turns them into short bullets, adds a TL;DR at the top, and a skim mode that highlights the paragraphs that carry the argument.
 

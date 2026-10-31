@@ -15,6 +15,19 @@ html.br-spot-on :is(.br-spot-active, .br-spot-anc),
 html.br-spot-on .br-spot-active :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, dd, dt, figcaption, td, th, pre) {
   opacity: 1 !important; /* wins over skim-mode fading too */
 }
+/* The hovered block grows a little. transform (not font-size) so the page does not reflow under the cursor. */
+html.br-spot-on :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, dd, dt, figcaption, td, th, pre, .br-tldr, .br-chunk) {
+  transform-origin: left center;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+html.br-spot-on .br-spot-active {
+  transform: scale(1.04);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.br-spot-on :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, dd, dt, figcaption, td, th, pre, .br-tldr, .br-chunk) {
+    transition: none;
+  }
+}
 
 /* Skim mode: after an AI pass, highlight key paragraphs and fade the rest. */
 html.br-skim-on.br-has-analysis .br-analyzed:not(.br-key) {

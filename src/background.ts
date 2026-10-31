@@ -1,4 +1,4 @@
-// Service worker: the Alt+Shift+B shortcut, and all AI calls (so keys never touch web pages).
+// Service worker: the site toggle shortcut, and all AI calls (so keys never touch web pages).
 
 import { loadKeys, loadSettings, toggleSite } from "./settings.ts";
 import { analyze } from "./ai/analyze.ts";
