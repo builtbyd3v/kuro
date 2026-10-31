@@ -21,12 +21,29 @@ function shouldSkip(parent: Element | null): boolean {
   return (parent as HTMLElement).isContentEditable === true;
 }
 
+const lightTextCache = new WeakMap<Element, boolean>();
+
+/**
+ * Light text means a dark page. Only there do word endings fade: on white pages the fade
+ * reads as washed-out grey, and full-strength text with bold starts looks better.
+ */
+function isLightText(el: Element): boolean {
+  let light = lightTextCache.get(el);
+  if (light === undefined) {
+    const m = getComputedStyle(el).color.match(/[\d.]+/g);
+    const [r, g, b] = (m ?? ["0", "0", "0"]).slice(0, 3).map((v) => Number(v) / 255);
+    light = 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.5;
+    lightTextCache.set(el, light);
+  }
+  return light;
+}
+
 function boldTextNode(node: Text, strength: Strength): void {
   const text = node.nodeValue ?? "";
   const parts = splitText(text);
   if (!parts.some((p) => p.word)) return;
   const wrap = document.createElement("span");
-  wrap.className = "br-w";
+  wrap.className = node.parentElement && isLightText(node.parentElement) ? "br-w br-fade" : "br-w";
   for (const part of parts) {
     if (!part.word) {
       wrap.append(part.text);

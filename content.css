@@ -11,7 +11,9 @@ b.br-b {
 :is(h1, h2, h3, h4, h5, h6, b, strong, th, dt) b.br-b {
   font-weight: 900;
 }
-.br-t {
+/* Dark pages only (light text): fade the rest of each word so the starts pop.
+   Light pages keep word endings at full strength. */
+.br-fade .br-t {
   opacity: 0.72;
 }
 /* Paragraph spotlight: dim blocks except the one under the cursor (and its containers). */
