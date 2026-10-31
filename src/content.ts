@@ -1,6 +1,6 @@
 // Content script: bolds word starts, runs the paragraph spotlight, and shows AI results.
 
-import { lighter, SMALL_TEXT_PX, splitText, splitWord, type Strength } from "./bold.ts";
+import { splitText, splitWord, type Strength } from "./bold.ts";
 import { loadSettings, normalizeSettings, type Settings } from "./settings.ts";
 import { wordCount } from "./ai/analyze.ts";
 import type { Analysis, AnalyzeRequest, AnalyzeResponse, Paragraph } from "./ai/types.ts";
@@ -21,26 +21,12 @@ function shouldSkip(parent: Element | null): boolean {
   return (parent as HTMLElement).isContentEditable === true;
 }
 
-const sizeCache = new WeakMap<Element, boolean>();
-
-/** Small text gets crowded with full bolding, so it gets a lighter weight and one step less. */
-function isSmallText(el: Element): boolean {
-  let small = sizeCache.get(el);
-  if (small === undefined) {
-    small = parseFloat(getComputedStyle(el).fontSize) < SMALL_TEXT_PX;
-    sizeCache.set(el, small);
-  }
-  return small;
-}
-
-function boldTextNode(node: Text, base: Strength): void {
+function boldTextNode(node: Text, strength: Strength): void {
   const text = node.nodeValue ?? "";
   const parts = splitText(text);
   if (!parts.some((p) => p.word)) return;
-  const small = node.parentElement ? isSmallText(node.parentElement) : false;
-  const strength = small ? lighter(base) : base;
   const wrap = document.createElement("span");
-  wrap.className = small ? "br-w br-sm" : "br-w";
+  wrap.className = "br-w";
   for (const part of parts) {
     if (!part.word) {
       wrap.append(part.text);
@@ -51,7 +37,12 @@ function boldTextNode(node: Text, base: Strength): void {
     b.className = "br-b";
     b.textContent = head;
     wrap.append(b);
-    if (tail) wrap.append(tail);
+    if (tail) {
+      const t = document.createElement("span");
+      t.className = "br-t";
+      t.textContent = tail;
+      wrap.append(t);
+    }
   }
   node.replaceWith(wrap);
 }

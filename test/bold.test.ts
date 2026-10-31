@@ -100,9 +100,3 @@ test("splitText returns no parts for empty text", () => {
   assert.deepEqual(splitText(""), []);
 });
 
-test("lighter steps strength down and bottoms out at light", async () => {
-  const { lighter } = await import("../src/bold.ts");
-  assert.equal(lighter("strong"), "medium");
-  assert.equal(lighter("medium"), "light");
-  assert.equal(lighter("light"), "light");
-});

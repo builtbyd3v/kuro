@@ -69,7 +69,7 @@ sequenceDiagram
 type Settings = {
   sites: Record<string, boolean>;      // bold word starts, key: location.hostname, off unless true
   focusSites: Record<string, boolean>; // focus reader, same keys, separate switch
-  strength: "light" | "medium" | "strong"; // 0.3, 0.45, 0.6 of each word, round up, min 1 letter; text under 16px gets one step less and semibold
+  strength: "light" | "medium" | "strong"; // 0.3, 0.45, 0.6 of each word, round up, min 1 letter
   skim: boolean;     // fade non-key paragraphs after an AI pass
   aiEnabled: boolean; // off by default
 };
