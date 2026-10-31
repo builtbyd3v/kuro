@@ -11,10 +11,19 @@ b.br-b {
 :is(h1, h2, h3, h4, h5, h6, b, strong, th, dt) b.br-b {
   font-weight: 900;
 }
-/* Dark pages only (light text): fade the rest of each word so the starts pop.
-   Light pages keep word endings at full strength. */
+/* Dark pages (light text): fade the rest of each word so the starts pop. */
 .br-fade .br-t {
   opacity: 0.72;
+}
+/* Light pages (dark text): pure black starts on neutral text, endings at 65%. */
+.br-black b.br-b {
+  color: #000;
+}
+a .br-black b.br-b {
+  color: inherit; /* links keep their own color */
+}
+.br-ink .br-t {
+  opacity: 0.65;
 }
 /* Paragraph spotlight: dim blocks except the one under the cursor (and its containers). */
 html.br-spot-on :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, dd, dt, figcaption, td, th, pre, .br-tldr, .br-chunk) {

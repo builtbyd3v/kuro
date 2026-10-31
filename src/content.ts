@@ -21,21 +21,25 @@ function shouldSkip(parent: Element | null): boolean {
   return (parent as HTMLElement).isContentEditable === true;
 }
 
-const lightTextCache = new WeakMap<Element, boolean>();
+const toneCache = new WeakMap<Element, string>();
 
 /**
- * Light text means a dark page. Only there do word endings fade: on white pages the fade
- * reads as washed-out grey, and full-strength text with bold starts looks better.
+ * Pick the word-ending style from the text color.
+ * Light text (a dark page): "br-fade", endings at 72%.
+ * Dark text (a light page): "br-ink", endings at 65%, and "br-black" too when the text is a
+ * neutral grey or black, so the starts turn pure black. Colored text keeps its own color.
  */
-function isLightText(el: Element): boolean {
-  let light = lightTextCache.get(el);
-  if (light === undefined) {
+function toneClass(el: Element): string {
+  let cls = toneCache.get(el);
+  if (cls === undefined) {
     const m = getComputedStyle(el).color.match(/[\d.]+/g);
     const [r, g, b] = (m ?? ["0", "0", "0"]).slice(0, 3).map((v) => Number(v) / 255);
-    light = 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.5;
-    lightTextCache.set(el, light);
+    const light = 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.5;
+    const neutral = Math.max(r, g, b) - Math.min(r, g, b) < 0.12;
+    cls = light ? "br-fade" : neutral ? "br-ink br-black" : "br-ink";
+    toneCache.set(el, cls);
   }
-  return light;
+  return cls;
 }
 
 function boldTextNode(node: Text, strength: Strength): void {
@@ -43,7 +47,7 @@ function boldTextNode(node: Text, strength: Strength): void {
   const parts = splitText(text);
   if (!parts.some((p) => p.word)) return;
   const wrap = document.createElement("span");
-  wrap.className = node.parentElement && isLightText(node.parentElement) ? "br-w br-fade" : "br-w";
+  wrap.className = node.parentElement ? `br-w ${toneClass(node.parentElement)}` : "br-w";
   for (const part of parts) {
     if (!part.word) {
       wrap.append(part.text);
