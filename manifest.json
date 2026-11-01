@@ -17,7 +17,7 @@
   "action": { "default_popup": "popup.html", "default_title": "BoldRead" },
   "commands": {
     "toggle-site": {
-      "suggested_key": { "default": "Alt+Shift+B", "mac": "MacCtrl+Shift+B" },
+      "suggested_key": { "default": "Alt+Shift+K", "mac": "MacCtrl+Shift+B" },
       "description": "Turn bold word starts on or off for this site"
     },
     "toggle-focus": {

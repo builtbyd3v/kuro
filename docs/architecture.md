@@ -11,7 +11,7 @@ flowchart LR
     L["Pure logic<br/>src/bold.ts"]
   end
   S[("chrome.storage.sync<br/>Settings")]
-  K(["Ctrl+Shift+B (Mac) / Alt+Shift+B<br/>commands API"])
+  K(["Ctrl+Shift+B (Mac) / Alt+Shift+K<br/>commands API"])
   D["Web page DOM"]
 
   P -- "write sites / focusSites / strength" --> S
@@ -28,7 +28,7 @@ flowchart LR
 | Part | File | Job |
 |---|---|---|
 | Popup | `popup.html`, `src/popup.ts`, `popup.css` | Bolding and focus reader per site, strength. Writes settings only. |
-| Service worker | `src/background.ts` | Handles the toggle shortcut (Control+Shift+B on Mac, Alt+Shift+B elsewhere) and flips the current site. |
+| Service worker | `src/background.ts` | Handles both shortcuts (bolding: Control+Shift+B on Mac, Alt+Shift+K elsewhere; focus reader: Control+Shift+F / Alt+Shift+F) and flips the setting for the current site. |
 | Content script | `src/content.ts`, `content.css` | Reads settings, bolds text nodes, runs the spotlight, reverts cleanly. |
 | Pure logic | `src/bold.ts` | `boldLength(word, strength)` and `splitText(text)`. No DOM, unit tested with `node --test`. |
 | AI | `src/ai/*.ts` | Jev triage (`jev.ts`), Haiku bullets and TL;DR (`summarize.ts`), orchestration (`analyze.ts`). Unit tested with fakes. |

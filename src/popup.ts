@@ -54,7 +54,7 @@ async function init(): Promise<void> {
     focus.disabled = true;
   }
 
-  // Show the shortcuts Chrome actually assigned (Control+Shift+B/F on a Mac, Alt+Shift+B/F elsewhere).
+  // Show the shortcuts Chrome actually assigned (Control+Shift+B/F on a Mac, Alt+Shift+K/F elsewhere).
   chrome.commands.getAll((cmds) => {
     let missing = false;
     for (const [name, id] of [["toggle-site", "shortcut-site"], ["toggle-focus", "shortcut-focus"]]) {

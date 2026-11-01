@@ -21,7 +21,7 @@ function shouldSkip(parent: Element | null): boolean {
   return (parent as HTMLElement).isContentEditable === true;
 }
 
-const toneCache = new WeakMap<Element, string>();
+let toneCache = new WeakMap<Element, string>();
 
 /**
  * Pick the word-ending style from the text color.
@@ -41,6 +41,36 @@ function toneClass(el: Element): string {
   }
   return cls;
 }
+
+/** Re-check every bolded run's tone, for sites that switch between light and dark after load. */
+function retone(): void {
+  toneCache = new WeakMap();
+  for (const wrap of document.querySelectorAll("span.br-w")) {
+    if (wrap.parentElement) wrap.className = `br-w ${toneClass(wrap.parentElement)}`;
+  }
+}
+
+let retoneTimer: ReturnType<typeof setTimeout> | undefined;
+function scheduleRetone(): void {
+  if (!bolded) return;
+  clearTimeout(retoneTimer);
+  retoneTimer = setTimeout(retone, 150);
+}
+
+// Theme switches usually flip a class, style or data attribute on <html> or <body>, or follow the OS setting.
+const THEME_ATTRS = { attributes: true, attributeOldValue: true, attributeFilter: ["class", "style", "data-theme", "data-color-mode", "data-mode"] };
+const withoutOurClasses = (v: string | null) => (v ?? "").split(/\s+/).filter((c) => c && !c.startsWith("br-")).sort().join(" ");
+const themeObserver = new MutationObserver((records) => {
+  // Our own br-* classes on <html> (spotlight, skim) are not a theme change.
+  const changed = records.some((r) =>
+    r.attributeName !== "class" || withoutOurClasses(r.oldValue) !== withoutOurClasses((r.target as Element).getAttribute("class")),
+  );
+  if (changed) scheduleRetone();
+});
+themeObserver.observe(document.documentElement, THEME_ATTRS);
+if (document.body) themeObserver.observe(document.body, THEME_ATTRS);
+else document.addEventListener("DOMContentLoaded", () => themeObserver.observe(document.body, THEME_ATTRS), { once: true });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", scheduleRetone);
 
 function boldTextNode(node: Text, strength: Strength): void {
   const text = node.nodeValue ?? "";
