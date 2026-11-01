@@ -414,4 +414,4 @@ if (document.body) loadSettings().then(apply);
 else document.addEventListener("DOMContentLoaded", () => loadSettings().then(apply), { once: true });
 
 // For tests that inject this file with a stubbed chrome.storage.
-(globalThis as { __boldread?: unknown }).__boldread = { apply: (raw: unknown) => apply(normalizeSettings(raw as never)), renderAnalysis, extractParagraphs };
+(globalThis as { __kuro?: unknown }).__kuro = { apply: (raw: unknown) => apply(normalizeSettings(raw as never)), renderAnalysis, extractParagraphs };

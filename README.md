@@ -1,10 +1,12 @@
-# BoldRead
+# Kuro
 
 A Chrome extension that makes long web pages easier to read, built by and for people with ADHD.
 
+*Kuro (黒) is Japanese for "black", as in bold ink.*
+
 It bolds the start of every word so your eyes always have somewhere to land, enlarges the paragraph you are reading while the rest of the page steps back, and (if you want) uses AI to turn dense walls of text into short bullets.
 
-![BoldRead on a light page and a dark page](docs/images/hero-light-dark.png)
+![Kuro on a light page and a dark page](docs/images/hero-light-dark.png)
 
 - **Bold word starts.** Strong, obvious anchors on every word, tuned separately for light and dark pages.
 - **Focus reader.** The paragraph under your cursor grows and everything else dims. Click outside the text to see the whole page again.
@@ -31,16 +33,16 @@ It bolds the start of every word so your eyes always have somewhere to land, enl
 
 The first part of each word is bolded. You don't read the bold part on purpose. It just keeps your eye from sliding into the line above or below.
 
-![The same paragraph without BoldRead (left) and with it (right)](docs/images/before-after.png)
+![The same paragraph without Kuro (left) and with it (right)](docs/images/before-after.png)
 
-BoldRead reads the page's text color and adapts:
+Kuro reads the page's text color and adapts:
 
 | Page | Word starts | Rest of the word |
 |---|---|---|
 | Light (dark text) | Pure black, bold | Faded to 65% |
 | Dark (light text) | Bold, in the page's own color | Faded to 72% |
 
-Links and colored text keep their own color. Starts inside headings and bold text go extra heavy so they still stand out. If a site switches between light and dark while you are on it, BoldRead re-checks and follows.
+Links and colored text keep their own color. Starts inside headings and bold text go extra heavy so they still stand out. If a site switches between light and dark while you are on it, Kuro re-checks and follows.
 
 There are three strengths. They set how much of each word is bold:
 
@@ -64,17 +66,17 @@ Point at a paragraph and it grows to 1.35x while the rest of the page dims. The 
 
 ### AI summaries and margin marks
 
-After you click **Summarize this page**, BoldRead adds a TL;DR at the top, swaps each dense paragraph for a few bullets (with **Show original** to get it back), and puts a short amber mark in the margin beside the paragraphs that carry the argument. The boxes are a thin outline in the page's own text color, so they fit on any site.
+After you click **Summarize this page**, Kuro adds a TL;DR at the top, swaps each dense paragraph for a few bullets (with **Show original** to get it back), and puts a short amber mark in the margin beside the paragraphs that carry the argument. The boxes are a thin outline in the page's own text color, so they fit on any site.
 
 ![AI summaries on a light and a dark page](docs/images/ai-summaries.png)
 
 ### Popup
 
-<img src="docs/images/popup.png" alt="The BoldRead popup" width="300">
+<img src="docs/images/popup.png" alt="The Kuro popup" width="300">
 
 ## Install
 
-BoldRead isn't on the Chrome Web Store yet. Load it from source:
+Kuro isn't on the Chrome Web Store yet. Load it from source:
 
 1. Install [Node.js](https://nodejs.org) 22.18 or newer.
 2. Clone this repo, then in the folder run:
@@ -84,11 +86,11 @@ BoldRead isn't on the Chrome Web Store yet. Load it from source:
    ```
    If npm says esbuild's install script is blocked, run `npm install-scripts approve esbuild` and build again.
 3. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, and pick the `dist` folder.
-4. Pin BoldRead from the puzzle-piece menu.
+4. Pin Kuro from the puzzle-piece menu.
 
 It should also work in other Chromium browsers that load unpacked extensions, such as Edge, Brave and Arc, though it is only tested in Chrome.
 
-**Updating:** pull, run `npm run build`, then click the reload icon on BoldRead in `chrome://extensions`. If the shortcuts changed, remove BoldRead and load it again, because Chrome only applies new default shortcuts on a fresh install.
+**Updating:** pull, run `npm run build`, then click the reload icon on Kuro in `chrome://extensions`. If the shortcuts changed, remove Kuro and load it again, because Chrome only applies new default shortcuts on a fresh install.
 
 ## Shortcuts
 
@@ -106,7 +108,7 @@ The popup shows the shortcuts Chrome actually assigned. If one says "none", anot
 1. Open an article and press the bolding shortcut, or open the popup and switch on **Bold word starts on this site**.
 2. Want the focus reader too? Press its shortcut or switch on **Focus reader on this site**. It works with or without bolding.
 3. Pick a strength in the popup. It applies on every site where bolding is on.
-4. BoldRead remembers your choice per site (`docs.python.org` and `python.org` count as different sites) and syncs settings across your Chrome profile.
+4. Kuro remembers your choice per site (`docs.python.org` and `python.org` count as different sites) and syncs settings across your Chrome profile.
 
 New content that loads as you scroll gets bolded too.
 
@@ -123,7 +125,7 @@ Click **Summarize this page** to run it. It usually takes 10 to 30 seconds. A pa
 
 ## Privacy
 
-- BoldRead has no server and no analytics. Nothing ever goes to the BoldRead author.
+- Kuro has no server and no analytics. Nothing ever goes to the Kuro author.
 - Bolding and the focus reader run entirely in your browser.
 - AI runs only when you click **Summarize this page**. Then the page's paragraph text is sent to TypeSafe and to Anthropic, and nowhere else. Don't run it on pages with private information you don't want to share with those services.
 - Your API keys are stored only in this browser (`chrome.storage.local`, not synced) and are sent only to the service they belong to. The calls are made from the extension's service worker, so web pages never see your keys.
@@ -164,7 +166,7 @@ npm run typecheck  # tsc --noEmit
 npm run build      # production build into dist/
 ```
 
-After a rebuild, click the reload icon on BoldRead in `chrome://extensions`.
+After a rebuild, click the reload icon on Kuro in `chrome://extensions`.
 
 | Path | What's there |
 |---|---|

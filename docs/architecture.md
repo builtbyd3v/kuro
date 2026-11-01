@@ -1,6 +1,6 @@
 # Architecture
 
-BoldRead is a Manifest V3 Chrome extension. It has three runtime parts and one shared settings store. Network calls happen only when the user clicks Summarize, and only from the service worker.
+Kuro is a Manifest V3 Chrome extension. It has three runtime parts and one shared settings store. Network calls happen only when the user clicks Summarize, and only from the service worker.
 
 ```mermaid
 flowchart LR

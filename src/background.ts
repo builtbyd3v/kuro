@@ -26,7 +26,7 @@ chrome.commands.onCommand.addListener(async (command, tab) => {
 
 async function handleAnalyze(req: AnalyzeRequest): Promise<AnalyzeResponse> {
   const [settings, keys] = await Promise.all([loadSettings(), loadKeys()]);
-  if (!settings.aiEnabled) return { ok: false, error: "AI is off. Turn it on in the BoldRead popup first." };
+  if (!settings.aiEnabled) return { ok: false, error: "AI is off. Turn it on in the Kuro popup first." };
   if (!keys.jevKey) return { ok: false, error: "Add your Jev (TypeSafe) API key in the popup." };
   if (!keys.anthropicKey) return { ok: false, error: "Add your Anthropic API key in the popup." };
 

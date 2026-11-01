@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "BoldRead",
+  "name": "Kuro",
   "version": "0.1.0",
   "description": "Bold word starts, a paragraph spotlight, and optional AI bullets to make long web text easier to read.",
   "permissions": ["storage", "activeTab"],
@@ -14,7 +14,7 @@
       "run_at": "document_idle"
     }
   ],
-  "action": { "default_popup": "popup.html", "default_title": "BoldRead" },
+  "action": { "default_popup": "popup.html", "default_title": "Kuro" },
   "commands": {
     "toggle-site": {
       "suggested_key": { "default": "Alt+Shift+K", "mac": "MacCtrl+Shift+B" },

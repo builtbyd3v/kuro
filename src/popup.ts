@@ -112,7 +112,7 @@ async function init(): Promise<void> {
         setStatus(res?.error ?? "Something went wrong.", true);
       }
     } catch {
-      setStatus("BoldRead isn't running on this tab yet. Reload the page and try again.", true);
+      setStatus("Kuro isn't running on this tab yet. Reload the page and try again.", true);
     } finally {
       analyze.disabled = false;
     }

@@ -1,4 +1,4 @@
-/* BoldRead content styles. Every rule is scoped to br- classes so nothing leaks into the page. */
+/* Kuro content styles. Every rule is scoped to br- classes so nothing leaks into the page. */
 
 /* Bold word starts. A fixed 700 (not "bolder") so light page fonts still get a clear bold,
    and the rest of the word steps back a little so the starts stand out on light and dark pages. */
@@ -69,7 +69,7 @@ html.br-skim-on.br-has-analysis .br-analyzed:not(.br-key) {
   display: none !important;
 }
 
-/* Boxes BoldRead inserts: a hairline outline in the page's own color, no fill. */
+/* Boxes Kuro inserts: a hairline outline in the page's own color, no fill. */
 .br-ui {
   box-sizing: border-box;
   margin: 1em 0;
